@@ -8,4 +8,6 @@
  * @package top_d_profiler_api
  */
 
+ include 'model.php';
+ 
 ?>
