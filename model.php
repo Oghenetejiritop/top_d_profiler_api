@@ -12,4 +12,22 @@ include 'connect_db.php';
 connectDatabase();
 
 
+function create_account() {
+    return ;
+}
+
+function access_account() {
+    return;
+}
+
+function update_account() {
+    return;
+}
+
+function delete_account() {
+    return;
+}
+
+
+
 ?>
