@@ -42,11 +42,11 @@ function getUserId($userName) {
  * @param string $country
  * @param string  $state_prov
  * @param string $city
- * @param string $streetAddress
+ * @param string $street
  * @param string $postalCode
  * @return void
  */
-    function create_account($fName, $mName, $lName, $email, $phoneNum, $userName, $password, $birtheDate, $gender, $country, $state_prov, $city, $streetAddress, $postalCode) {
+    function create_account($fName, $mName, $lName, $email, $phoneNum, $userName, $password, $birtheDate, $gender, $country, $state_prov, $city, $street, $postalCode) {
     global $pdo;
     $query = "INSERT INTO users (username, password) VALUES (?,?);";
     $statement = $pdo->prepare($query);
@@ -56,8 +56,10 @@ function getUserId($userName) {
     if(isset($_SESSION['uid'])) {
         $uid = (int) $_SESSION['uid'];
         $queryCreateAccount = "INSERT INTO account(user_id, firstname, middlename, lastname, email, phone_no, birthdate, gender) VALUES (?,?,?,?,?,?,?,?);";
+        $queryCreateAccount .= "INSERT INTO countries(user_id, country) VALUES (?,?);";
+        $queryCreateAccount .= "INSERT INTO Addresses(user_id, country, state_prov, city, street, postal_code) VALUES (?,?,?,?,?,?);";
         $statementInsertion = $pdo->prepare($queryCreateAccount);
-        $statementInsertion->execute([$uid, $fName, $mName, $lName, $email, $phoneNum, $birtheDate, $gender]);
+        $statementInsertion->execute([$uid, $fName, $mName, $lName, $email, $phoneNum, $birtheDate, $gender, $uid, $country, $uid, $country, $state_prov, $city, $street, $postalCode]);
         }
 
     return ;
@@ -88,14 +90,4 @@ function delete_account() {
 }
 
 
-create_account('Laz', 'Oghenetejiri', 'Onosajerhe', 'peaceking@gmail.com', '+19012156366', 'Killer', '$password2', '1999-06-24', 'm', '$country', '$state_prov', '$city', '$streetAddress', '$postalCode');
-
-
-
-echo json_encode($_SESSION['uid']);
-
-    if(isset($_SESSION['uid'])) {
-        session_destroy();
-        session_unset();
-            }
 ?>
