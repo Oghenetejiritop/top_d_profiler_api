@@ -88,7 +88,7 @@ function delete_account() {
 }
 
 
-create_account('Peace', 'Oghenetejiri', 'Onosajerhe', 'peaceking@gmail.com', '+19012156366', 'kingtop', '$password2', '1999-06-24', 'm', '$country', '$state_prov', '$city', '$streetAddress', '$postalCode');
+create_account('Laz', 'Oghenetejiri', 'Onosajerhe', 'peaceking@gmail.com', '+19012156366', 'Killer', '$password2', '1999-06-24', 'm', '$country', '$state_prov', '$city', '$streetAddress', '$postalCode');
 
 
 
