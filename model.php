@@ -50,7 +50,7 @@ function getUserId($userName) {
     global $pdo;
     $query = "INSERT INTO users (username, password) VALUES (?,?);";
     $statement = $pdo->prepare($query);
-    $statement->execute([$userName, $password]);
+    $statement->execute([$userName, password_hash($password, PASSWORD_DEFAULT)]);
     getUserId($userName);
 
     if(isset($_SESSION['uid'])) {
