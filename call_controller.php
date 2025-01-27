@@ -1,5 +1,7 @@
 <?php
 
+header('Content-Type: application/json');
+
 /**
  * call_controller.php
  *  Script that handles the API call base on the type of request
@@ -10,4 +12,9 @@
 
  include 'model.php';
  
+
+ $method = $_SERVER['REQUEST_METHOD'];
+$uri = $_SERVER['REQUEST_URI'];
+
+
 ?>
