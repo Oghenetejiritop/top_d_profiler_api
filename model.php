@@ -13,18 +13,20 @@ include 'connect_db.php';
 connectDatabase();
 
 /**
- *  getUserId: Retrieves the user ID
+ *  getCurrentUser: Retrieves the user ID, username, and user id; and set the data to respective sessions
  * @param string $name$userName
- * @return void
  */
-function getUserId($userName) {
+function getCurrentUser($userName) {
     global $pdo;
-    $query = "SELECT user_id FROM users WHERE username=?";
+    $query = "SELECT * FROM users WHERE username=?;";
     $statement = $pdo->prepare($query);
     $statement->execute([$userName]);
-    $uid = $statement->fetch(PDO::FETCH_ASSOC);
-    if($uid)
-        $_SESSION['uid'] = $uid['user_id'];
+    $user = $statement->fetch(PDO::FETCH_ASSOC);
+    if($user) {
+        $_SESSION['uid'] = $user['user_id'];
+        $_SESSION['username'] = $user['username'];
+        $_SESSION['password'] = $user['password'];
+    }
 }
 
 
@@ -44,14 +46,14 @@ function getUserId($userName) {
  * @param string $city
  * @param string $street
  * @param string $postalCode
- * @return void
+ * @return bool
  */
     function create_account($fName, $mName, $lName, $email, $phoneNum, $userName, $password, $birtheDate, $gender, $country, $state_prov, $city, $street, $postalCode) {
     global $pdo;
     $query = "INSERT INTO users (username, password) VALUES (?,?);";
     $statement = $pdo->prepare($query);
-    $statement->execute([$userName, $password]);
-    getUserId($userName);
+    $statement->execute([$userName, password_hash($password, PASSWORD_DEFAULT)]);
+    getCurrentUser($userName);
 
     if(isset($_SESSION['uid'])) {
         $uid = (int) $_SESSION['uid'];
@@ -60,18 +62,32 @@ function getUserId($userName) {
         $queryCreateAccount .= "INSERT INTO Addresses(user_id, country, state_prov, city, street, postal_code) VALUES (?,?,?,?,?,?);";
         $statementInsertion = $pdo->prepare($queryCreateAccount);
         $statementInsertion->execute([$uid, $fName, $mName, $lName, $email, $phoneNum, $birtheDate, $gender, $uid, $country, $uid, $country, $state_prov, $city, $street, $postalCode]);
+        return true;
         }
-
-    return ;
+    return  false;
 }
+
 
 /**
  *  access_account: Retreives data of the user
- * @return void
+ * @param string $userName
+ * @return array
  */
-function access_account() {
-    return;
+function access_account($userName) {
+    global $pdo;
+    $query = "SELECT username FROM users WHERE username=?;";
+    $statement = $pdo->prepare($query);
+    $statement->execute([$userName]);
+    $currentUser = [];
+    getCurrentUser($userName);
+ 
+    if(isset($_SESSION['uid'])) {
+        $currentUser = $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    return $currentUser;
 }
+
 
 /**
  *  update_account: Modifies or edit user's profile
@@ -80,6 +96,7 @@ function access_account() {
 function update_account() {
     return;
 }
+
 
 /**
  *  delete_account: Delete the user's profile
