@@ -75,13 +75,14 @@ function getCurrentUser($userName) {
  */
 function access_account($userName) {
     global $pdo;
-    $query = "SELECT username FROM users WHERE username=?;";
-    $statement = $pdo->prepare($query);
-    $statement->execute([$userName]);
     $currentUser = [];
     getCurrentUser($userName);
  
     if(isset($_SESSION['uid'])) {
+        $query = "SELECT u.username, a.firstname, a.middlename, a.lastname, a.email, a.phone_no, a.birthdate, a.gender,  ad. street, ad.city, ad.postal_code, ad.state_prov, ad.country ";
+        $query .= "FROM users u INNER JOIN account a ON u.user_id = a.user_id INNER JOIN addresses ad ON ad.user_id = u.user_id WHERE u.username=?;";
+        $statement = $pdo->prepare($query);
+        $statement->execute([$userName]);
         $currentUser = $statement->fetch(PDO::FETCH_ASSOC);
     }
 
