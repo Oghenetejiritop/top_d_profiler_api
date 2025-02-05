@@ -26,7 +26,7 @@ switch($method) {
         }
         else
         $user = ["response" => "false $uri"];
-        echo json_encode($user);
+        echo json_encode($user, JSON_PRETTY_PRINT);
                 break;
         case 'POST':
             break;
